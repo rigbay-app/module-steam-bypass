@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rigbay.SteamBypass", "src\Rigbay.SteamBypass\Rigbay.SteamBypass.csproj", "{328FE6D5-5005-48D5-A0D5-A8025370A596}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rigbay.Abstractions", "..\..\src\Rigbay.Abstractions\Rigbay.Abstractions.csproj", "{3C137387-6940-4A3E-A022-A93F945A07E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rigbay.Abstractions", "external\rigbay\src\Rigbay.Abstractions\Rigbay.Abstractions.csproj", "{3C137387-6940-4A3E-A022-A93F945A07E3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject

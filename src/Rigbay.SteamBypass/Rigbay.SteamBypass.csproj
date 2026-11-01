@@ -1,11 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <!--
-    The Steam access module for Rigbay (id steam-bypass). In the host repository it references Rigbay.Abstractions by project;
-    in its own repository replace that ProjectReference by
-      <PackageReference Include="Rigbay.Abstractions" Version="0.1.*" ExcludeAssets="runtime" />
+    Standalone module repository. The host contract is the git submodule external/rigbay (pinned to a commit of
+    https://github.com/rigbay-app/rigbay); nothing is published as a package. Clone with the recurse-submodules option.
     Rigbay.Abstractions.dll must NOT end up in the output folder: the host supplies its own copy.
-    No other package is used: the registry, sockets, HttpClient and System.Text.Json are all in the shared framework.
   -->
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -21,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Rigbay.Abstractions\Rigbay.Abstractions.csproj">
+    <ProjectReference Include="..\..\external\rigbay\src\Rigbay.Abstractions\Rigbay.Abstractions.csproj">
       <Private>false</Private>
       <ExcludeAssets>runtime</ExcludeAssets>
     </ProjectReference>
