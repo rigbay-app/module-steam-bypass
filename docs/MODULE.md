@@ -1,6 +1,13 @@
 # The Steam access module (task S1)
 
-`modules/steambypass/` is the Rigbay port of the standalone app `minhdevtree/steam-bypass` (read only for us; its project skill and
+> **Where these notes come from.** They were written in the [Rigbay repository](https://github.com/rigbay-app/rigbay) while the module lived in
+> its `modules/steambypass/` folder and were copied here with only the paths changed: the module folder is now the root of this repository,
+> `docs/steambypass/evidence/` is `docs/evidence/`. "Task S1" and "the coordinator" are the Rigbay project's own work-split words. The evidence
+> section counts tests of the whole Rigbay solution (`Rigbay.sln`, other modules included); in this repository the solution is
+> `Rigbay.SteamBypass.sln` and it runs the 248 tests of this module. The README of this repository has the short, current statement of what
+> was and was not verified; this document has the long one.
+
+This repository is the Rigbay port of the standalone app `minhdevtree/steam-bypass` (read only for us; the project skill and
 `references/blocking-evidence.md` hold the measurements the design rests on). Module id `steam-bypass`, name "Steam access", group `network`,
 `net8.0`, no package besides `Rigbay.Abstractions`. It keeps to its own folder (own solution `Rigbay.SteamBypass.sln`, own
 `Directory.Build.props`) so it can move to a `module-steam-bypass` repository like the other two.
@@ -91,9 +98,9 @@ test scans the test sources for it).
   WinINet notification. Fuzz: 21 hand-made hostile inputs and 60 random byte streams (seed 20261101) at both ports, then the proxy still serves
   the PAC and the download port and every connection is closed.
 - The built module folder (no `Rigbay.Abstractions.dll` in it) was loaded by the real app from a scratch modules folder with a scratch data
-  folder (`tools/run-elevated.ps1`). **The real host found a manifest error that the unit tests had not** (a `requires` entry over 200
+  folder (`tools/run-elevated.ps1` of the Rigbay repository). **The real host found a manifest error that the unit tests had not** (a `requires` entry over 200
   characters); it is fixed and a test now checks the limits.
-  PNGs of the app window (PrintWindow of its own HWND, each one looked at) in `docs/steambypass/evidence/`: `page-off-dark`, `page-off-light`,
+  PNGs of the app window (PrintWindow of its own HWND, each one looked at) in `docs/evidence/`: `page-off-dark`, `page-off-light`,
   `page-off-vi-dark`, `dashboard-dark`, `dashboard-light`, `approval-dark` (the dialog for the switch: effect text, "Steam bypass: Off → On",
   Cancel is the default button), `approval-auto-on-light`.
 - On this machine the standalone app was running (listening on 127.0.0.1:18081 and :80, `AutoConfigURL` set to its address). Loading the module,
