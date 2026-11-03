@@ -5,7 +5,7 @@ Restores access to Steam on networks that block it with DNS poisoning plus SNI a
 addresses to it. Module id `steam-bypass`.
 
 This is a module for [Rigbay](https://github.com/rigbay-app/rigbay), a Windows app that manages modules for your own machine.
-Version 0.1.0, early development: there is no release and no package. It is the module port of the standalone app
+Version 0.1.1 (pre-release, see [CHANGELOG.md](CHANGELOG.md) and the [releases](https://github.com/rigbay-app/module-steam-bypass/releases)). It is the module port of the standalone app
 [steam-bypass](https://github.com/minhdevtree/steam-bypass) (same technique, same domain list format, new code).
 
 ![The module page in Rigbay, bypass off (dark theme)](docs/evidence/page-off-dark.png)
@@ -50,13 +50,17 @@ It writes a small state file (the saved previous value) to `%LOCALAPPDATA%\Rigba
 
 ## Verified and not verified
 
-**Verified** (2026-11-01, one machine, Windows 11, Rigbay 0.1.0 host elevated):
+**Verified** (2026-11-01 for 0.1.0, 2026-11-03 for 0.1.1; one machine, Windows 11, Rigbay 0.1 host elevated):
 
-- `dotnet build` of the solution: 0 warnings, 0 errors, in a fresh `git clone --recurse-submodules`. `dotnet test`: 248 tests pass. The tests use
+- `dotnet build` of the solution: 0 warnings, 0 errors, in a fresh `git clone --recurse-submodules`. `dotnet test`: 269 tests pass (248 in 0.1.0). The tests use
   fakes for the Windows setting, DNS-over-HTTPS and the upstream servers; the registry code runs against a scratch key under
   `HKCU\Software\RigbayTests\` that each test removes; the engine runs on real loopback sockets on free ports (never 80 or 18081), including
   21 hostile inputs and 60 random byte streams.
-- The built module was loaded by the real Rigbay app: the page, the dashboard bay, the English and Vietnamese texts and the approval dialog
+- 0.1.1: the race in the switch worker found by a review is fixed (one change at a time, only the owner of a change can end it; a second
+  request is refused with "A change is already in progress"), with deterministic tests that hold a fake in the middle of a change. The new tests
+  ran 30 times in a row alone and 30 times under a two-core CPU stress with no failure. Not re-done for 0.1.1: the look at the real app (the page
+  and texts changed by three language keys only).
+- The built module was loaded by the real Rigbay app (0.1.0): the page, the dashboard bay, the English and Vietnamese texts and the approval dialog
   were rendered and looked at (`docs/evidence/`). The dialog was opened and nobody answered it.
 - While the standalone Steam Bypass app was running on that machine, loading the module, opening its page and running `status` left the old
   app's setting untouched (read before and after).
