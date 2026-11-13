@@ -5,10 +5,17 @@ Restores access to Steam on networks that block it with DNS poisoning plus SNI a
 addresses to it. Module id `steam-bypass`.
 
 This is a module for [Rigbay](https://github.com/rigbay-app/rigbay), a Windows app that manages modules for your own machine.
-Version 0.1.2 (pre-release, see [CHANGELOG.md](CHANGELOG.md) and the [releases](https://github.com/rigbay-app/module-steam-bypass/releases)). **Needs Rigbay 0.1.2 or newer** (host API 0.1.3): Rigbay 0.1.0 and 0.1.1 do not check that and would offer it, so update Rigbay first. It is the module port of the standalone app
+Version 0.1.3 (pre-release, see [CHANGELOG.md](CHANGELOG.md) and the [releases](https://github.com/rigbay-app/module-steam-bypass/releases)). **Needs Rigbay 0.1.5 or newer** (host API 0.1.4): Rigbay 0.1.0 and 0.1.1 do not check that and would offer it, and 0.1.2 and 0.1.3 refuse it, so update Rigbay first. It is the module port of the standalone app
 [steam-bypass](https://github.com/minhdevtree/steam-bypass) (same technique, same domain list format, new code).
 
 ![The module page in Rigbay, bypass off (dark theme)](docs/evidence/page-off-dark.png)
+
+**For other modules (host API 0.1.4).** `rigbay steam-bypass status` and `test` are declared read-only (`test` opens connections to check Steam and changes no setting). `on` and `off` are declared as
+a system-setting write (the same effect text as the switch). Their preview is just "Steam bypass on" / "Steam bypass off", with no before-state. Each reports its own undo when it **changed** something
+(`on` is undone by `off` and the other way round, with no arguments) and reports none when the bypass was already in the wanted state; that is the reason they report an undo and do not leave it
+to a fixed "steam-bypass off" step in a plan: a fixed undo would also turn off a bypass the owner had switched on before the game started. The numbers (connections, failed connections) are
+also refreshed when another module such as Watch asks for them in the background: at min(10 s, max(1 s, the asked interval)), with the page closed. Nothing is published while the bypass is off,
+as before, so a Watch rule on `steam.proxy.errors` says "waiting" until the bypass is on.
 
 ## Read this before you turn it on
 
@@ -50,9 +57,9 @@ It writes a small state file (the saved previous value) to `%LOCALAPPDATA%\Rigba
 
 ## Verified and not verified
 
-**Verified** (2026-11-01 for 0.1.0, 2026-11-03 for 0.1.1, build and tests again 2026-11-13 for 0.1.2; one machine, Windows 11, Rigbay 0.1 host elevated for the older checks):
+**Verified** (2026-11-01 for 0.1.0, 2026-11-03 for 0.1.1, build and tests again 2026-11-13 for 0.1.2 and 0.1.3; one machine, Windows 11, Rigbay 0.1 host elevated for the older checks):
 
-- `dotnet build` of the solution: 0 warnings, 0 errors, in a fresh `git clone --recurse-submodules`. `dotnet test`: 269 tests pass (248 in 0.1.0). The tests use
+- `dotnet build` of the solution: 0 warnings, 0 errors, in a fresh `git clone --recurse-submodules`. `dotnet test`: 287 tests pass (248 in 0.1.0). The tests use
   fakes for the Windows setting, DNS-over-HTTPS and the upstream servers; the registry code runs against a scratch key under
   `HKCU\Software\RigbayTests\` that each test removes; the engine runs on real loopback sockets on free ports (never 80 or 18081), including
   21 hostile inputs and 60 random byte streams.
@@ -60,6 +67,7 @@ It writes a small state file (the saved previous value) to `%LOCALAPPDATA%\Rigba
   request is refused with "A change is already in progress"), with deterministic tests that hold a fake in the middle of a change. The new tests
   ran 30 times in a row alone and 30 times under a two-core CPU stress with no failure. Not re-done for 0.1.1: the look at the real app (the page
   and texts changed by three language keys only).
+- 0.1.3 (host API 0.1.4: verb metadata and background readings; no change to what the module reads or writes when the owner uses it): build and tests in a fresh clone with the submodule. The bypass was not turned on, and no plan or other module ever called `on` or `off`.
 - 0.1.2 (the new page layout, no change to what the module reads or writes): build and tests in a fresh clone with the submodule, see the count above. The new page was **not** looked at in the real app for this release, and the bypass was not turned on.
 - The built module was loaded by the real Rigbay app (0.1.0): the page, the dashboard bay, the English and Vietnamese texts and the approval dialog
   were rendered and looked at (`docs/evidence/`). The dialog was opened and nobody answered it.
